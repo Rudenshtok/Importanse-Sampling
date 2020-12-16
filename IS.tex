@@ -1,0 +1,156 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[14pt]{extsizes}
+\usepackage{fullpage}
+\usepackage{graphicx}
+\graphicspath{{pictures/}}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+\usepackage[usenames]{color}
+\usepackage{colortbl}
+\usepackage[hidelinks]{hyperref,xcolor}
+\usepackage{setspace,amsmath}
+
+\begin{document}
+
+\begin{center}
+\hfill \break
+\hfill \break
+\hfill\break
+\hfill \break
+\hfill \break
+\hfill \break
+\hfill \break
+\hfill\break
+\hfill \break
+\hfill \break
+\hfill \break
+\large{Importance sampling and control variates}\\
+\hfill \break
+\hfill \break
+\hfill \break
+\normalsize{There exist many problems in science and engineering whose exact solution either does not exist or is difficult to find. For the solutions of those problems, one has to resort to approximate methods. The Variational Monte Carlo (VMC) technique is relatively insensitive to the size of the system, it can be applied to large systems where some other methods are computationally not feasible.}\\
+\hfill \break
+\hfill \break
+\hfill \break
+\hfill \break
+\hfill \break
+\hfill \break
+\small{Varvara \textsc{Rudenko}}\\
+
+\hfill \break
+\hfill \break
+\hfill \break
+\hfill \break
+\hfill \break
+\small{17.08.2020}\\
+\thispagestyle{empty}
+\end{center}                             
+
+\newpage
+\tableofcontents
+\newpage
+
+\section{History and Origin of Monte Carlo Methods}
+The term ‘Monte Carlo’ has been named after the famous Mediterranean casino town in Monaco. The Monte Carlo (MC) method refers to a class of statistical methods which use random numbers (probabilistic method)similar to those in a casino game of chance, to solve a real and physical (nonprobabilistic) problem.  Since the method uses random numbers, it is therefore stochasticin nature and has associated statistical properties. With the advent of modern computers, the random sampling required in most analyses can easily be obtained in a more robust, faster and efficient way. MC methods are widely used in many areas of science and engineering and are particularly useful for solving complicated higher-dimensional integrals and in the study of N-body systems.
+
+\section{Monte Carlo Integration Using Importance Sampling - Theory}
+Take an integral, we want to evaluate it, 
+\newline
+    \begin{equation}\label{eq:fourierrow}
+        I=\int_{a}^{b}f(x)dx
+    \end{equation}
+\newline
+where \textit{f(x)} is a smooth function defined in the interval [a,b]. In the ‘crude’-MC method, the integral is approximated as:
+\newline
+    \begin{equation}\label{eq:fourierrow}
+        I=\int_{a}^{b}f(x)dx \approx \frac{b-a}{N}\sum_{i=1}^{N}f(x_{i}),
+    \end{equation}
+\newline
+where ${x_{i}}$ are random numbers, in the interval [a,b]. The variance in \textit{f} is given by:
+\newline
+    \begin{equation}\label{eq:fourierrow}
+        \sigma ^2 = \frac{b-a}{N}\sum_{i=1}^{N}f^2(x_{i})-[\frac{b-a}{N}\sum_{i=1}^{N}f(x_{i})]^2
+    \end{equation}
+\newline
+The integration error can be defined as:
+\newline
+    \begin{equation}\label{eq:fourierrow}
+        \sigma1= \sqrt{(\frac{\sigma^2}{N})}
+    \end{equation}
+\newline
+There are two ways to reduce the error. First, you can increase the number of tests. Second, reduce the variance. The second option is much more suitable, since it requires less computing time. In the case of " raw " integration-MC, it counts the function uniformly, that is, with a uniform distribution. Therefore, if a small area with a large volume of integration makes a significant contribution to the Integral, then there will only be a few samples, which can lead to large statistical errors, even though the number of tests increases. The result of MC integration can be greatly improved with the idea of importance sampling. In this case, the selection points are selected from a distribution that concentrates the points where the integrated function is larger.
+\newline
+\newline
+Let \textit{g(x)} be a Probability density function (PDF) defined on [a,b], that has a form close to that of the original function \textit{f(x)}. 
+\newline
+    \begin{equation}\label{eq:fourierrow}
+        \frac{f(x)}{g(x)} \approx const
+    \end{equation}
+\newline
+Therefore, we can write:
+\newline
+    \begin{equation}\label{eq:fourierrow}
+        I = \int_{a}^{b}f(x)dx = \int_{a}^{b}[\frac{f(x)}{g(x)}]g(x)dx
+    \end{equation}
+\newline
+The integral can now be calculated with the random numbers generated from the distribution \textit{g(x)} (weight function) and evaluating ${\frac{f(xi)}{g(xi)}}$ at these points.
+This is 
+\newline
+    \begin{equation}\label{eq:fourierrow}
+        <\frac{f(x)}{g(x)}>=\frac{1}{N}\sum_{i=1}^{N}\frac{f(x_{i})}{g(x_{i})}
+    \end{equation}
+\newline
+N - number of steps, ${x_{i}}$ - the random numbers distributed as \textit{g(x)}.
+\newline 
+Another way is to define ${dG(x)=g(x)dx,}$ where 
+\newline
+    \begin{equation}\label{eq:fourierrow}
+        G(x)=\int_{a}^{x}g(x)dx
+    \end{equation}
+\newline
+You can replace variables, ${r=G(x),}$ where \textit{r} is a sequence of random numbers evenly distributed in the interval (0,1). Therefore:
+\newline
+    \begin{equation}\label{eq:fourierrow}
+        I=\int_{a}^{b}[\frac{f(x)}{g(x)}]dG(x)=\int_{0}^{1}\frac{f(G^{-1}(r))}{g(G^{-1}(r))}dr \approx \frac{1}{N}\sum_{i=1}^{N}\frac{f(G^{-1}(r))}{g(G^{-1}(r))}dr
+    \end{equation}
+\newline
+The form \textit{g(x)} must be chosen so that it minimizes the variance of integral ${\frac{f(x)}{g(x)}}$, you can choose it so that the integral of ${\frac{f(x)}{g(x)}}$ is almost flat, and therefore the variance will be formed to a large extent.
+\newline
+\newline
+The variance is calculated from:
+\newline
+    \begin{equation}\label{eq:fourierrow}
+        \sigma^2=\frac{1}{N}\sum_{i=1}^{N}\widetilde{f}(x_{i})^2-(\frac{1}{N}\sum_{i=1}^{N}\widetilde{f}(x_{i}))^2
+    \end{equation}
+\newline
+Then the integration error is equal to:
+\newline
+    \begin{equation}\label{eq:fourierrow}
+        \sigma1=\sqrt{\frac{\sigma^2}{N}}
+    \end{equation}
+\newline
+\section{Monte Carlo Integration Using Importance Sampling - Practice}
+Now, let's illustrate the algorithm with one of the examples.
+The integral that we will calculate:
+\newline
+	\begin{equation}\label{eq:fourierrow}
+		I = \int_{-\infty}^{\infty}\frac{1}{2*0.4*\sqrt{2\pi}}(x^4+{(x-2)}^2)(e^{-\frac{{(x-1)}^2}{0.32}}+e^{-\frac{{(x+2)}^2}{0.32}})
+	\end{equation}
+\newline
+For the truth, we take the value calculated in WolframAlpha = 19.64. Applying a crude MS, we get the result: ${19.59 \pm 0.25}$
+\newline
+\begin{figure}[h!]
+\center{\includegraphics{pict/MC.png}}
+\end{figure}
+\newline 
+Let's try to improve the accuracy of measurements using IS. We select the parameters that give the lowest variance.
+\newline
+\begin{figure}[h!]
+\center{\includegraphics{pict/ISgra.png}}
+\end{figure}
+
+
+
+
+
+\end{document}
