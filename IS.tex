@@ -119,6 +119,38 @@ Then the integration error is equal to:
         \sigma1=\sqrt{\frac{\sigma^2}{N}}
     \end{equation}
 \newline
+
+\section{Variance}
+\begin{equation}
+	Var[\pi_{n}(f)]=\frac{1}{n^2}\sum_{k=0}^{n-1}Var[f(X_{k})]=\frac{{\sigma_{\pi}}^2(f)}{n},
+\end{equation}
+where ${{\sigma_{\pi}}^2(f)}= Var[f(X_{0})]= \pi(f^2)-(\pi(f))^2$. What options to fight variance?
+\begin{itemize}
+	\item Increase n. Not an option in many situations.
+	\item Control variates: replace ${f}$ by ${f-g}$, where ${\pi(g) = 0}$. Denote by ${G:=\pi(g)= 0}$. Find
+	\begin{equation}
+		\hat{g_{n}}:=argmin V_{n}(f-g),
+	\end{equation}
+	where
+	\begin{equation}
+		V_{n}(f-g)=\frac{1}{n-1}\sum_{k=0}^{n-1}(f(X_{k})-\pi_{n}(f)-g(X_{k})+\pi_{n}(g))^2
+	\end{equation}
+\end{itemize}
+Let ${\pi(x)=e^{-U(x)}}$. Take Stein's control variates
+\begin{equation}
+	g_{\phi}(x)=-<\phi(x),\Delta U(x)>+\phi'(x),
+\end{equation}
+then by construction we get zero expectation.
+Let ${X=R}$. Then easy to believe ${E_{g_{\phi}}(x)=0}$. Idea is to take ${\phi(x)=\phi(x,\theta)}$ - neural network.
+\paragraph{Setup}
+Our setup for experiments:
+\begin{itemize}
+	\item For one dimension ${f(x)=x^3}$, various polynomials for ${d =2}$; Tested distributions:
+	\item Gaussian Mixtures in dimensions 1, 2;
+	\item Banana shaped distribution;
+	\item Donut distribution:
+\end{itemize}
+
 \section{Monte Carlo Integration Using Importance Sampling - Practice}
 Now, let's illustrate the algorithm with one of the examples.
 The integral that we will calculate:
